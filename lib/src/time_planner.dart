@@ -28,6 +28,9 @@ class TimePlanner extends StatefulWidget {
   /// When widget loaded scroll to current time with an animation. Default is true
   final bool? currentTimeAnimation;
 
+  final ScrollController? mHC; // mainHorizontalController;
+  final ScrollController? mVC; // mainVerticalController;
+
   /// Time planner widget
   const TimePlanner({
     Key? key,
@@ -37,14 +40,16 @@ class TimePlanner extends StatefulWidget {
     this.tasks,
     this.style,
     this.currentTimeAnimation,
+    this.mHC,
+    this.mVC
   }) : super(key: key);
   @override
   _TimePlannerState createState() => _TimePlannerState();
 }
 
 class _TimePlannerState extends State<TimePlanner> {
-  ScrollController mainHorizontalController = ScrollController();
-  ScrollController mainVerticalController = ScrollController();
+  late ScrollController mainHorizontalController; // = ScrollController();
+  late ScrollController mainVerticalController; // = ScrollController();
   ScrollController dayHorizontalController = ScrollController();
   ScrollController timeVerticalController = ScrollController();
   TimePlannerStyle style = TimePlannerStyle();
@@ -89,6 +94,8 @@ class _TimePlannerState extends State<TimePlanner> {
     config.borderRadius = style.borderRadius;
     isAnimated = widget.currentTimeAnimation;
     tasks = widget.tasks ?? [];
+    mainHorizontalController = widget.mHC ?? ScrollController();
+    mainVerticalController = widget.mVC ?? ScrollController();
   }
 
   @override
@@ -127,6 +134,7 @@ class _TimePlannerState extends State<TimePlanner> {
     mainVerticalController.addListener(() {
       timeVerticalController.jumpTo(mainVerticalController.offset);
     });
+    debugPrint("Init PPK version of time_planner");
     return GestureDetector(
       child: Container(
         color: style.backgroundColor,
